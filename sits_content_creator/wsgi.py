@@ -15,4 +15,5 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sits_content_creator.settings")
 
 application = get_wsgi_application()
 
+# Add this at the end of your wsgi.py
 app = application
