@@ -33,7 +33,7 @@ def generate_blog_content(title, keywords):
     
     while attempt < max_attempts:
         try:
-            response = model.generate_content(prompt)
+            response = model.generate_content(prompt, stream=True)
             
             if response.text:
                 content = response.text
@@ -155,7 +155,7 @@ def gemini_paraphrase(content):
         Paraphrased version:
         """
         
-        response = model.generate_content(prompt)
+        response = model.generate_content(prompt, stream=True)
         
         if response.text:
             return response.text.strip()
