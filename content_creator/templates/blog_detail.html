@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ blog_post.title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-1 main-container">
+    <div id="tooltip_success">
+      <p id="message"></p>
+    </div>
+
+    <div id="tooltip_error">
+      <p id="message-error"></p>
+    </div>
+
+    <div class="anchor-button">
+      <a href="{% url 'generate_blog' %}" class="btn mt-3"><span class="remove_span_text">New Blog</span><i class="fa-solid fa-blog"></i></a>
+      {% if request.user.is_authenticated %}
+        <button type="submit" form="save_draft_form" class="form_button mt-3" id="save_draft_btn"><span class="remove_span_text">Save Draft</span><i class="fa-regular fa-bookmark"></i></button>
+      {% else %}
+        <button type="button" class="form_button mt-3" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="remove_span_text">Login to save draft</span><i class="fas fa-sign-in-alt"></i></button>
+      {% endif %}
+
+      <button type="submit" form="regenerate-form" class="form_button mt-3" id="Regenerate-btn"><span class="remove_span_text">Regenerate</span><i class="fa-solid fa-arrows-rotate"></i></button>
+
+      <div id="pre-loader" class="preloader d-none">
+        <div class="loader"></div>
+      </div>
+
+      {% comment %} <div class="modal fade login_register_modal" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title" id="loginModalLabel">Login</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url 'login' %}" method="post" id="inside_login_form">
+                {% csrf_token %}
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" /><br /><br />
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" /><br /><br />
+                <input type="submit" value="Login" />
+              </form>
+              <button>Create new account</button>
+              <form method="post">
+                {% csrf_token %}
+                <label>Username:</label>
+                <input type="text" name="username" /><br /><br />
+                <label>Email:</label>
+                <input type="email" name="email" /><br /><br />
+                <label>Password:</label>
+                <input type="password" name="password" /><br /><br />
+                <label>Confirm Password:</label>
+                <input type="password" name="confirm_password" /><br /><br />
+                <button type="submit">Register</button>
+              </form>
+              <button>already have account</button>
+            </div>
+          </div>
+        </div>
+      </div> {% endcomment %}
+      
+      <div class="modal fade login_register_modal" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Login Form -->
+              <div id="loginForm" class="register-container m-0 w-auto">
+                <form action="{% url 'login' %}" method="post" id="inside_login_form" class="register-form">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required />
+                  </div>
+
+                  <input type="submit" value="Login" class="Login_reg" />
+                </form>
+                <p class="login-link">
+                  Don't have an account? <button id="showRegisterForm" class="Login_regis">Register</button>
+                </p>
+              </div>
+
+              <!-- Register Form -->
+              <div id="registerForm" class="register-container m-0 w-auto" style="display: none;">
+                <form action="{% url 'register' %}" method="post" id="inside_register_form" class="register-form">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required />
+                  </div>
+
+                  <button type="submit" class="Login_reg">Register</button>
+                </form>
+                <p class="login-link">
+                  Already have an account? <button id="showLoginForm" class="Login_regis">Log in</button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form id="regenerate-form" action="{% url 'generate_blog' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="title" value="{{ blog_post.title }}" />
+      <input type="hidden" name="keywords" value="{{ blog_post.keywords }}" />
+    </form>
+
+    {% if is_draft %}
+      <form id="save_draft_form" action="{% url 'save_draft' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="title" value="{{ blog_post.title }}" />
+        <input type="hidden" name="keywords" value="{{ blog_post.keywords }}" />
+        <input type="hidden" name="content" value="{{ blog_post.content }}" />
+        <input type="hidden" name="image_url" value="{{ blog_post.image_url }}" />
+      </form>
+    {% endif %}
+
+    <div class="content-div my-3">
+      <h1 class="title-heading text-center m-0">Title : {{ blog_post.title }}</h1>
+      <button class="copy-btn" data-clipboard-text="{{ blog_post.title }}"><i class="far fa-copy"></i></button>
+    </div>
+
+    <div class="content-div">
+      <img src="{{ blog_post.image_url }}" alt="{{ blog_post.title }}" class="img-fluid mb-4" />
+      <button class="download-btn" onclick="downloadImage('{{ blog_post.image_url }}', '{{ blog_post.title }}')"><i class="fa-solid fa-download"></i></button>
+    </div>
+
+    <div class="content-div mb-4">
+      <div class="blog-content">{{ blog_post.content|safe }}</div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+  <script>
+    const copyHtml = document.querySelector('.copy-html')
+    
+    const clipboardHtml = new ClipboardJS(copyHtml)
+    
+    clipboardHtml.on('success', () => {
+      const tooltip = document.createElement('div')
+      tooltip.className = 'tooltip'
+      tooltip.textContent = 'Copied!'
+      copyHtml.appendChild(tooltip)
+      setTimeout(() => {
+        tooltip.remove()
+      }, 1500)
+    })
+    
+    copyHtml.addEventListener('click', () => {})
+    
+    const copyBtn = document.querySelector('.copy-btn')
+    const clipboard = new ClipboardJS(copyBtn)
+    clipboard.on('success', () => {
+      const tooltip = document.createElement('div')
+      tooltip.className = 'tooltip'
+      tooltip.textContent = 'Copied!'
+      copyBtn.appendChild(tooltip)
+      setTimeout(() => {
+        tooltip.remove()
+      }, 1500)
+    })
+    
+    copyBtn.addEventListener('click', () => {})
+    
+    const submitBtn = document.getElementById('Regenerate-btn')
+    const preloader = document.getElementById('pre-loader')
+    
+    submitBtn.addEventListener('click', () => {
+      preloader.classList.remove('d-none')
+    })
+    fetch('/generate-blog/', { method: 'POST' })
+      .then((response) => response.text())
+      .then((data) => {
+        if (data.success) {
+          preloader.classList.add('d-none')
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+    
+    document.getElementById('showRegisterForm').addEventListener('click', function () {
+      document.getElementById('loginForm').style.display = 'none'
+      document.getElementById('registerForm').style.display = 'block'
+    })
+    
+    document.getElementById('showLoginForm').addEventListener('click', function () {
+      document.getElementById('loginForm').style.display = 'block'
+      document.getElementById('registerForm').style.display = 'none'
+    })
+  </script>
+{% endblock %}

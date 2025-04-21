@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="myTable" class="display">
+    <thead>
+      <tr>
+        <th class="table-1">S No.</th>
+        <th class="table-2">Title</th>
+        <th class="table-3">Created At</th>
+        <th class="table-4">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for draft in drafts %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ draft.title }}</td>
+          <td>{{ draft.created_at }}</td>
+          <td>
+            <a href="{% url 'view_draft' draft.id %}"><button type="button" class="btn btn-info btn-sm m-2"><i class="fa-solid fa-eye p-0"></i></button></a>
+            <button onclick="confirmDelete({{ draft.id }})" class="btn btn-danger btn-sm m-2"><i class="fa-solid fa-trash p-0"></i></button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

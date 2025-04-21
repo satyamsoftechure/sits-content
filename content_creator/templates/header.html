@@ -1,0 +1,47 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light flex-column p-0">
+    <div class="container m-0">
+      <a href="/generate-blog" class="sits_pdf_logo"><img src="https://softechure.com/assets/front/images/logo.png" class="padding-top-15 mobpad2 w-100" alt="Softechure Logo" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><strong class="navbar-toggler-icon"></strong></button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav me-0 mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link f-15" aria-current="page" href="/generate-blog">SITS AI</a>
+          </li>
+          <li class="nav-item">
+            {% if request.user.is_authenticated %}
+              <div class="profile-dropdown mx-3">
+                <button class="toggle-button"><i class="far fa-user p-0"></i></button>
+                <ul class="dropdown-menu ">
+                  <li>
+                    <span>Profile : ({{request.user.username}})</span>
+                  </li>
+                  <li>
+                    <a href="{% url 'my_drafts' %}">Saved Drafts</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                  </li>
+                </ul>
+              </div>
+            {% else %}
+              <div class="profile-dropdown">
+                <button class="toggle-button mx-3"><i class="far fa-user p-0"></i></button>
+                <ul class="dropdown-menu change_dropdown">
+                  <li>
+                    <a href="{% url 'register' %}">Register</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'login_form' %}">Login</a>
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+          </li>
+        </ul>
+
+        <button class="navbar-toggler nav-close-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Close navigation"><strong class="navbar-close-icon">×</strong></button>
+      </div>
+    </div>
+  </nav>
+</div>

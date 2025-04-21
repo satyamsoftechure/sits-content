@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Generate Blog Post
+{% endblock %}
+
+{% block content %}
+  <div class="banner p-3">
+    <div class="container">
+      <div>
+        <p class="banner-para">The <strong>SITS AI Content Creator</strong> is a cutting-edge tool designed to generate high-quality blog content accompanied by relevant images. This innovative AI-powered solution is capable of producing engaging and informative blog posts that cater to various topics and industries.</p>
+      </div>
+    </div>
+
+    <div id="tooltip_success">
+      <p id="message"></p>
+    </div>
+
+    <form method="post" id="generate-form">
+      {% csrf_token %}
+      <div class="my-5 generate-form-title">{{ form.title }}</div>
+      <div class="generate-form-keywords">
+        {{ form.keywords }}
+      </div>
+      <div class="Generate-button my-5">
+        <button type="submit" form="generate-form" class="btn" id="submit-btn">Generate Blog</button>
+        <div id="preloader" class="preloader d-none">
+          <div class="loader"></div>
+        </div>
+      </div>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+    </form>
+  </div>
+
+  <script>
+    const submitform = document.getElementById('generate-form');
+    const preloader = document.getElementById('preloader');
+
+    submitform.addEventListener('submit', () => {
+      preloader.classList.remove('d-none');   
+    });
+    fetch('/generate-blog/', { method: 'POST' })
+      .then(response => response.text())
+      .then(data => {
+        if (data.success) {
+          preloader.classList.add('d-none');
+        } else {
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+{% endblock %}

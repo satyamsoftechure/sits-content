@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  View Draft
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-1 main-container">
+    <a href="/my_drafts"><button class="back_button"><i class="fa-solid fa-arrow-left p-0"></i> Back to Draft</button></a>
+    <div class="content-div my-3">
+      <h1 class="title-heading text-center m-0">Title : {{ draft.title }}</h1>
+      <button class="copy-btn" data-clipboard-text="{{ draft.title }}"><i class="far fa-copy"></i></button>
+    </div>
+    <div class="content-div">
+      <img src="{{ draft.image_url }}" alt="{{ draft.title }}" class="img-fluid mb-4" />
+      <button class="download-btn" onclick="downloadImage('{{ draft.image_url }}', '{{ draft.title }}')"><i class="fa-solid fa-download"></i></button>
+    </div>
+    <div class="content-div">
+      <div class="blog-content">{{ draft.content|safe }}</div>
+      <button class="copy-html" data-clipboard-text="{{ draft.content }}"><i class="far fa-copy"></i></button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+  <script>
+    const copyHtml = document.querySelector('.copy-html')
+    
+    const clipboardHtml = new ClipboardJS(copyHtml)
+    
+    clipboardHtml.on('success', () => {
+      const tooltip = document.createElement('div')
+      tooltip.className = 'tooltip'
+      tooltip.textContent = 'Copied!'
+      copyHtml.appendChild(tooltip)
+      setTimeout(() => {
+        tooltip.remove()
+      }, 1500)
+    })
+    
+    copyHtml.addEventListener('click', () => {})
+    
+    const copyBtn = document.querySelector('.copy-btn')
+    const clipboard = new ClipboardJS(copyBtn)
+    clipboard.on('success', () => {
+      const tooltip = document.createElement('div')
+      tooltip.className = 'tooltip'
+      tooltip.textContent = 'Copied!'
+      copyBtn.appendChild(tooltip)
+      setTimeout(() => {
+        tooltip.remove()
+      }, 1500)
+    })
+    
+    copyBtn.addEventListener('click', () => {})
+  </script>
+{% endblock %}

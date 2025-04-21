@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ blog_post.title }}
+{% endblock %}
+
+{% block content %}
+  <div id="login_reg_error">
+    <p id="message-error"></p>
+  </div>
+  <div class="register-container">
+    <h2>Login to Your Account</h2>
+    <form method="post" id="login_form" action="{% url 'login_form' %}" class="register-form">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <input type="submit" value="Login" class="Login_reg" />
+    </form>
+    <p class="login-link">
+      <a href="{% url 'forgot_password' %}">Forget password ?</a>
+    </p>
+    <p class="login-link">
+      Don't have an account? <a href="{% url 'register' %}">Create a new account</a>
+    </p>
+  </div>
+  <script>
+    document.getElementById('login_form').addEventListener('submit', function (e) {
+      e.preventDefault()
+    
+      fetch("{% url 'login_form' %}", {
+        method: 'POST',
+        body: new FormData(this),
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            window.location.href = "{% url 'generate_blog' %}"
+          } else {
+            const errorTooltip = document.getElementById('login_reg_error')
+            const errorMessage = document.getElementById('message-error')
+            errorMessage.textContent = data.message
+            errorTooltip.style.display = 'block'
+            setTimeout(() => {
+              errorTooltip.style.display = 'none'
+            }, 3000)
+          }
+        })
+    })
+  </script>
+{% endblock %}
