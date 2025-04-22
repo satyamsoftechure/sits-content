@@ -13,7 +13,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
@@ -124,8 +124,10 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
-
+@csrf_protect
 def register(request):
+    print("CSRF Cookie from client:", request.COOKIES.get('csrftoken'))
+    print("CSRF Header from client:", request.headers.get('X-CSRFToken'))
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -151,7 +153,10 @@ def register(request):
         return JsonResponse({"success": True, "message": "Register successfully !"})
     return render(request, "register.html")
 
+@csrf_protect
 def register_form(request):
+    print("CSRF Cookie from client:", request.COOKIES.get('csrftoken'))
+    print("CSRF Header from client:", request.headers.get('X-CSRFToken'))
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
