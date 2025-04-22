@@ -6,3 +6,5 @@ protobuf
 python-dotenv==1.1.0
 Requests==2.32.3
 google-generativeai
+psycopg2-binary
+dj-database-url
