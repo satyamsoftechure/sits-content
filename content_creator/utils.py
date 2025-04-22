@@ -166,69 +166,6 @@ def gemini_paraphrase(content):
         print(f"Error in Gemini paraphrasing: {str(e)}")
         return content  # Return original content if paraphrasing fails
 
-# @memory.cache
-# def check_plagiarism(content):
-#     sentences = re.split(r'(?<=[.!?])\s+', content)
-#     total_sentences = len(sentences)
-#     plagiarized_sentences = []
-    
-#     for i, sentence in enumerate(sentences):
-#         search_url = f"https://www.google.com/search?q={sentence}"
-#         headers = {'User-Agent': 'Mozilla/5.0'}
-#         response = requests.get(search_url, headers=headers)
-        
-#         if response.status_code == 200:
-#             soup = BeautifulSoup(response.text, 'html.parser')
-#             search_results = soup.find_all('div', class_='g')
-            
-#             for result in search_results:
-#                 snippet = result.find('div', class_='s')
-#                 if snippet:
-#                     similarity = SequenceMatcher(None, sentence, snippet.get_text()).ratio()
-#                     if similarity > 0.8:
-#                         plagiarized_sentences.append((i, sentence, similarity))
-#                         break
-    
-#     plagiarism_percentage = (len(plagiarized_sentences) / total_sentences) * 100
-#     return plagiarism_percentage, plagiarized_sentences
-
-# def modify_content(content, plagiarism_percentage):
-#     if plagiarism_percentage <= 10:
-#         return content
-    
-#     sentences = re.split(r'(?<=[.!?])\s+', content)
-#     modified_sentences = []
-    
-#     for sentence in sentences:
-#         if random.random() < (plagiarism_percentage - 10) / 90:  # Probability of modifying based on how much we need to reduce
-#             # Apply various modification techniques
-#             modification = random.choice(['rephrase', 'expand', 'summarize'])
-            
-#             if modification == 'rephrase':
-#                 modified_sentence = rephrase_sentence(sentence)
-#             elif modification == 'expand':
-#                 modified_sentence = expand_sentence(sentence)
-#             else:
-#                 modified_sentence = summarize_sentence(sentence)
-            
-#             modified_sentences.append(modified_sentence)
-#         else:
-#             modified_sentences.append(sentence)
-    
-#     return ' '.join(modified_sentences)
-
-# def rephrase_sentence(sentence):
-#     # Simple rephrasing logic (in practice, you'd use more sophisticated NLP techniques)
-#     words = sentence.split()
-#     if len(words) > 3:
-#         mid = len(words) // 2
-#         words[mid], words[mid-1] = words[mid-1], words[mid]
-#     return ' '.join(words)
-
-# def expand_sentence(sentence):
-#     # Simple expansion logic
-#     return f"{sentence} Furthermore, this point is crucial to understand the overall context."
-
 # def summarize_sentence(sentence):
     # Simple summarization logic
     words = sentence.split()
