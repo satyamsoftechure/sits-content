@@ -150,3 +150,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'satyam.softechure@gmail.com'
 EMAIL_HOST_PASSWORD = 'qphd vkwf omvs pqvu'
 DEFAULT_FROM_EMAIL = 'satyam.softechure@gmail.com'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
