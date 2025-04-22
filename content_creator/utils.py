@@ -9,17 +9,6 @@ from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import nltk
 from nltk.tokenize import sent_tokenize
-import os
-
-nltk_data_dir = os.path.join(os.getcwd(), 'tmp_nltk_data')
-os.makedirs(nltk_data_dir, exist_ok=True)
-
-# Only download specific packages you need, to a custom location
-nltk.download('punkt', download_dir=nltk_data_dir)
-nltk.download('stopwords', download_dir=nltk_data_dir)
-
-# Tell NLTK where to find this data
-nltk.data.path.append(nltk_data_dir)
 
 # Configure the Gemini API
 genai.configure(api_key=settings.GEMINI_API_KEY)
