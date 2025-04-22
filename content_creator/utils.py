@@ -9,6 +9,7 @@ from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import nltk
 from nltk.tokenize import sent_tokenize
+import os
 
 nltk_data_dir = os.path.join(os.getcwd(), 'tmp_nltk_data')
 os.makedirs(nltk_data_dir, exist_ok=True)
